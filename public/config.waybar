@@ -1,0 +1,114 @@
+{
+    "layer": "bottom",
+    // "position": "top",
+    "height": 30,
+
+    "modules-left": ["custom/wofi", "custom/obsidian", "sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": [
+      "tray",
+      "custom/spotify",
+      "sway/scratchpad",
+      "custom/weather",
+      "custom/mail",
+      "backlight",
+      "pulseaudio",
+      "idle_inhibitor",
+      "clock"
+    ],
+    "sway/mode": {
+        "format": " {}"
+    },
+    "custom/wofi": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "wofi",
+    },
+    "custom/obsidian": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "obsidian",
+        "on-click-right": "firefox https://www.vlt.char.ps/Home"
+    },
+    "sway/workspaces": {
+        "format": "{name}",
+        //"format": "{icon}",
+        "disable-scroll": true,
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+        },
+    },
+    "sway/window": {
+        "max-length": 80,
+        "tooltip": false
+    },
+    "clock": {
+        "format": "{:%a, %d %b, %I:%M %p}",
+        "tooltip": false
+    },
+    "pulseaudio": {
+        "format": "{volume} {icon} ",
+        "format-alt": "{icon} ",
+        "format-alt-click": "click-right",
+        "format-muted": "",
+        "format-icons": {
+            "phone": [" ", " ", " ", " "],
+            "default": ["", "", "", ""]
+        },
+        "scroll-step": 10,
+        "on-click": "pavucontrol",
+        "tooltip": false
+    },
+    "custom/spotify": {
+        "interval": 1,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/spotify.sh",
+        "exec-if": "pgrep spotify",
+        "escape": true
+    },
+    "backlight": {
+        "format": "{icon}",
+        "format-alt": "{percent}% {icon}",
+        "format-alt-click": "click-right",
+        "format-icons": ["", ""],
+        "on-scroll-down": "light -A 1",
+        "on-scroll-up": "light -U 1"
+    },
+    // "custom/weather": {
+    //     "format": "{}",
+    //     "tooltip": true,
+    //     "interval": 1800,
+    //     "exec": "$HOME/.config/waybar/modules/wttr.py",
+    //     "return-type": "json"
+    // },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        },
+        "tooltip": false
+    },
+    "custom/mail": {
+        "format": "",
+        "format-alt": "{alt} ",
+        "format-alt-click": "click-right",
+        "interval": 60,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/mail.py",
+        "tooltip": false
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": true,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}",
+        "on-click": "swaymsg scratchpad show",
+    },
+    "tray": { /* wifi and bluetooth  and stuff */
+        "icon-size": 18
+    },
+}
