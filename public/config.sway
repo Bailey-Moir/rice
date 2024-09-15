@@ -95,6 +95,7 @@ exec_always {
 
 # Start a terminal
 bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec ~/.config/sway/scripts/floating $term
 
 # Kill focused window
 bindsym $mod+q kill
