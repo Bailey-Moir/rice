@@ -13,6 +13,7 @@ GAP = 10
 inner_gap = bool_input('inner gap')
 waybar_gap = bool_input('waybar gap')
 top = bool_input('top', default=False)
+translucent = bool_input('translucent')
 
 # output_path = os.path.expanduser('~/.config/sway/config')
 
@@ -45,6 +46,9 @@ with open(os.path.expanduser('~/.config/rice/public/style.waybar.css'), 'r') as 
         content += marginCSS
 
     content += f'window#waybar {{ background: {'transparent' if waybar_gap else '@base'}; }}'
+
+    if translucent:
+        content = content.replace("@base;", "@base50;")
 
     destination.write(content)
 #
