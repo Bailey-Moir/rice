@@ -1,4 +1,5 @@
 import os
+import math
 from termcolor import colored
 
 def bool_input(name: str, default = True) -> bool:
@@ -8,12 +9,21 @@ def bool_input(name: str, default = True) -> bool:
     else:
         return True if len(raw) != 0 and raw.strip()[0].lower() == 'y' else False
 
+def float_input(name: str, default = 0.5) -> float:
+    raw = input(f'{name} ({default:.1f}f): ')
+    try:
+        return math.ceil(10*float(raw))/10
+    except ValueError:
+        return default
+
+
 GAP = 10
 
 inner_gap = bool_input('inner gap')
 waybar_gap = bool_input('waybar gap')
 top = bool_input('top', default=False)
-translucent = bool_input('translucent')
+bar_opactiy = float_input('waybar opacity', default=0.5)
+foot_opacity = float_input('foot opacity', default=1.0)
 
 # output_path = os.path.expanduser('~/.config/sway/config')
 
@@ -21,6 +31,7 @@ with open(os.path.expanduser('~/.config/rice/public/config.sway'), 'r') as sourc
     content = source.read()
 
     content += f'\ngaps inner {GAP if inner_gap else 0}'
+    # content += f"\nfor_window [app_id=\"foot\"] opacity {foot_opacity}"
 
     destination.write(content)
 
@@ -47,10 +58,15 @@ with open(os.path.expanduser('~/.config/rice/public/style.waybar.css'), 'r') as 
 
     content += f'window#waybar {{ background: {'transparent' if waybar_gap else '@base'}; }}'
 
-    if translucent:
-        content = content.replace("@base;", "@base50;")
+    content = content.replace("@base;", f'@base{f'{100*bar_opactiy:.0f}' if bar_opactiy != 1 else ""};')
 
     destination.write(content)
-#
+
+with open(os.path.expanduser('~/.config/rice/public/config.foot'), 'r') as source, open(os.path.expanduser('~/.config/foot/foot.ini'), 'w') as destination:
+    content = source.read()
+
+    content = content.replace("[colors]\n", f'[colors]\nalpha={foot_opacity}\n')
+
+    destination.write(content)
 
 os.system("swaymsg reload")
