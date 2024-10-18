@@ -10,7 +10,8 @@ def bool_input(name: str, default = True) -> bool:
 
 GAP = 10
 
-gap = bool_input('gap')
+inner_gap = bool_input('inner gap')
+waybar_gap = bool_input('waybar gap')
 top = bool_input('top', default=False)
 
 # output_path = os.path.expanduser('~/.config/sway/config')
@@ -18,7 +19,7 @@ top = bool_input('top', default=False)
 with open(os.path.expanduser('~/.config/rice/public/config.sway'), 'r') as source, open(os.path.expanduser('~/.config/sway/config'), 'w') as destination:
     content = source.read()
 
-    content += f'\ngaps inner {GAP if gap else 0}'
+    content += f'\ngaps inner {GAP if inner_gap else 0}'
 
     destination.write(content)
 
@@ -35,7 +36,7 @@ with open(os.path.expanduser('~/.config/rice/public/config.waybar'), 'r') as sou
 with open(os.path.expanduser('~/.config/rice/public/style.waybar.css'), 'r') as source, open(os.path.expanduser('~/.config/waybar/style.css'), 'w') as destination:
     content = source.read()
 
-    if gap:
+    if waybar_gap:
         marginCSS = f"""
             .modules-left {{ margin-left: {GAP}px; }}
             .modules-right {{ margin-right: {GAP}px; }}
@@ -43,7 +44,7 @@ with open(os.path.expanduser('~/.config/rice/public/style.waybar.css'), 'r') as 
         """
         content += marginCSS
 
-    content += f'window#waybar {{ background: {'transparent' if gap else '@base'}; }}'
+    content += f'window#waybar {{ background: {'transparent' if waybar_gap else '@base'}; }}'
 
     destination.write(content)
 #
