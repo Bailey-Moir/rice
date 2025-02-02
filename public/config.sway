@@ -1,65 +1,28 @@
-# Read `man 5 sway` for a complete reference.
-
-# xwayland enable
+xwayland enable
 
 font Liberation Mono 12
 
-### Variables
-#
-# Logo key. Use Mod1 for Alt.
 set $mod Mod4
-# Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
 set $term foot
 set $gnome-schema org.gnome.desktop.interface
-# Your preferred application launcher
-# Note: pass the final command to swaymsg so that the resulting window can be opened
-# on the original workspace that the command was run on.
-# set $menu dmenu_path | dmenu | xargs swaymsg exec --
-
-### Output configuration
-# set $opacity 0.9
 set $opacity 0.9 
+
 # for_window [app_id="foot"] opacity $opacity
-# bindsym $mod+a focus parent
 # for_window [class="discord"] opacity $opacity
-#for_window [class=".*"] opacity $opacity
+# output * bg ~/.config/backgrounds/tile.png tile
+# output * bg ~/.config/backgrounds/5120x2880.png fill
 
 
-# Wallpaper
-output * bg $(python ~/.config/sway/scripts/background-picker.py) fill
-
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-
-
-### Input configuration
-#
-# Example configuration:
-#
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
 input "1:1:AT_Translated_Set_2_keyboard" {
     xkb_layout us,ca
     xkb_variant ,multix
     xkb_options grp:shifts_toggle
 
 }
-
 input type:touchpad {
     dwt enabled
     tap enabled
@@ -70,8 +33,8 @@ input * {
     xkb_options caps:escape
 }
 
-### Autostart
 
+exec fcitx5 -d
 exec swayidle -w \
      timeout 300 '/home/charps/.config/nwg-bar/lock.sh' \
      timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
@@ -79,23 +42,26 @@ exec swayidle -w \
 exec /usr/lib/geoclue-2.0/demos/agent
 exec gammastep -m wayland
 exec blueman-applet
-exec mako
 exec nm-applet --indicator
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec autotiling
+exec syncthing serve --no-browser
+exec eww daemon
+exec redshift-gtk -l 43.5320:172.636
+exec ~/.config/sway/scripts/toggleCamera.sh
 exec_always {
     gsettings set $gnome-schema gtk-theme 'Arc-Dark'
     gsettings set $gnome-schema icon-theme 'Papirus'
 }
 
-### Key bindings
-#
-# Basics:
-#
+
+# hides mouse after 10 seconds
+seat * hide_cursor 10000
+
 
 # Start a terminal
 bindsym $mod+Return exec $term
-bindsym $mod+Shift+Return exec ~/.config/sway/scripts/floating $term
+bindsym $mod+Shift+Return exec foot -a "foot_float" -w $(slurp -f "%wx%h")
 
 # Kill focused window
 bindsym $mod+q kill
@@ -105,8 +71,6 @@ bindsym $mod+d exec wofi --show=drun
 
 # Start your browser
 bindsym $mod+w exec firefox
-# bindsym $mod+w exec firefox
-# bindsym $mod+Shift+w exec microsoft-edge-beta --enable-features=UseOzonePlatform --ozone-platform=wayland
 
 # Start your file manager
 bindsym $mod+e exec GTK_THEME=Adwaita:dark nemo
@@ -117,17 +81,6 @@ bindsym $mod+o exec obsidian
 # Start Anki
 bindsym $mod+a exec anki
 
-# Start LibreOffice
-# bindsym $mod+d exec libreoffice
-
-# Color Picker
-bindsym $mod+Shift+p exec wl-color-picker clipboard
-
-# Drag floating windows by holding down $mod and left mouse button.
-# Resize them with right mouse button + $mod.
-# Despite the name, also works for non-floating windows.
-# Change normal to inverse to use left mouse button for resizing and right
-# mouse button for dragging.
 floating_modifier $mod normal
 
 # Reload the configuration file
@@ -136,31 +89,27 @@ bindsym $mod+Shift+c reload
 # Lock screen
 bindsym $mod+Ctrl+l exec /home/charps/.config/nwg-bar/lock.sh
 
-# Exit sway (logs you out of your Wayland session)
 bindsym $mod+x exec nwg-bar -t bar.json
 bindsym $mod+Ctrl+x exec sway exit
 
 bindsym XF86AudioRaiseVolume exec pamixer -i 2
 bindsym XF86AudioLowerVolume exec pamixer -d 2
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindcode 248 exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-# bindsym Shift+XF86AudioRaiseVolume exec pamixer --default-source -i 1
-# bindsym Shift+XF86AudioLowerVolume exec pamixer --default-source -d 1
+bindsym XF86AudioMicMute exec /home/charps/.config/sway/scripts/toggleMute.sh
 
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-# bindsym XF86MonBrightnessDown exec brightnessctl -q set 5%-
-# bindsym XF86MonBrightnessUp exec brightnessctl -q set +5%
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/sway/scripts/brightness.sh +2%
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/sway/scripts/brightness.sh 2%-
+
+bindsym XF86Launch2 exec 'grim -g "$(slurp)" - | wl-copy --type image/png'
 
 bindsym Print exec $HOME/.config/sway/scripts/grimshot.sh save output
 bindsym Shift+Print exec $HOME/.config/sway/scripts/grimshot.sh save active
 bindsym Ctrl+Print exec $HOME/.config/sway/scripts/grimshot.sh save area
 
-#
-# Moving around:
-#
 
 # Move your focus around
 bindsym $mod+$left focus left
@@ -186,9 +135,6 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-#
-# Workspaces:
-#
 
 # Switch to workspace
 bindsym $mod+1 workspace number 1
@@ -229,6 +175,8 @@ bindsym $mod+Shift+Ctrl+0 move container to workspace number 10; workspace numbe
 bindsym Mod1+Tab workspace next
 bindsym Mod1+Shift+Tab workspace prev
 
+# bindsym $mod+Tab exec eval $(xdotool getmouselocation --shell) && eww open --pos "$X"x"$Y" --toggle tray
+
 
 # Note: workspaces can have any name you want, not just numbers.
 # We just use 1-10 as the default.
@@ -244,9 +192,11 @@ default_border none
 # gaps inner 10 # (-) ADDED TO END FOR CONFIG THING
 gaps outer 0
 
+# shadows enable
+# shadow_offset 0 0
+# shadow_blur_radius 10
+
 # You can "split" the current object of your focus with
-# $mod+b or $mod+v, for horizontal and vertical splits
-# respectively.
 bindsym $mod+b splith
 bindsym $mod+v splitv
 
@@ -268,43 +218,21 @@ for_window [app_id="org.gnome.Calculator"] floating enable
 for_window [app_id="org.kde.kronometer"] floating enable
 for_window [app_id="org.kde.kronometer"] resize set width 35 ppt
 for_window [app_id="io.bassi.Amberol"] floating enable
-# Move focus to the parent container
-# bindsym $mod+a focus parent
 
-#
-# Scratchpad:
-#
-
-# Sway has a "scratchpad", which is a bag of holding for windows.
-# You can send windows there and get them back later.
-# Move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
 bindsym $mod+minus scratchpad show
 
-#
-# Resizing containers:
-#
-
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
 
-    # Ditto, with arrow keys
     bindsym Left resize shrink width 10px
     bindsym Down resize grow height 10px
     bindsym Up resize shrink height 10px
     bindsym Right resize grow width 10px
-
-    # Return to default mode
+# back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
@@ -317,35 +245,31 @@ set $screenshot 1 selected, 2 whole, 3 selected clipboard, 4 whole clipboard, 5 
 mode "$screenshot" {
     bindsym 1 exec $HOME/.config/sway/scripts/grimshot.sh save area, mode "default"
     bindsym 2 exec $HOME/.config/sway/scripts/grimshot.sh save output, mode "default"
+    bindsym 3 exec 'grim -g "$(slurp)" - | wl-copy --type image/png', mode "default"
     bindsym 4 exec 'wayshot --stdout | wl-copy', mode "default"
-    bindsym 5 exec 'grim -g "$(slurp -p)" -t ppm - | magick ppm:- txt:- | grep -om1 "#[0-9A-Fa-f]\{6\}" | wl-copy', mode "default"
-    bindsym 3 exec 'wayshot -s "$(slurp -f \"%x %y %w %h\")" --stdout | wl-copy', mode "default"
-
+    bindsym 5 exec wl-color-picker clipboard, mode "default"
 # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
-    bindsym $mod+Print mode "default"
+    bindsym $mod+Shift+Print mode "default"
+}
+bindsym $mod+Shift+p mode "$screenshot"
+
+
+for_window {
+    [app_id="foot_float"] floating enable
+    [app_id="blueman-manager"] floating enable, \
+                               resize set width 680 height 400, \
+                               move position center
+    [app_id="pavucontrol"] floating enable,  \
+                           resize set width 680 height 400, \
+                           move position center
+    [app_id="nm-connection-editor"] floating enable,  \
+                                    move position center
+    [class="^.*"] inhibit_idle fullscreen
+    [app_id="^.*"] inhibit_idle fullscreen
 }
 
-bindsym $mod+Print mode "$screenshot"
-
-#
-# Rules
-#
-
-for_window [app_id="blueman-manager"] floating enable, resize set width 680 height 400, \
-    move position center
-for_window [app_id="pavucontrol"] floating enable, resize set width 680 height 400, \
-    move position center
-for_window [app_id="nm-connection-editor"] floating enable, move position center
-for_window [class="^.*"] inhibit_idle fullscreen
-for_window [app_id="^.*"] inhibit_idle fullscreen
-
-#
-# Status Bar:
-#
-
-# Read `man 5 sway-bar` for more information about this section.
 bar {
     swaybar_command waybar
 }

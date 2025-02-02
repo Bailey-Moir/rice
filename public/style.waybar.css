@@ -12,28 +12,22 @@
 
 window#waybar {
     color:      @white;
-    /*background: transparent;*/
-    /*background: @base;*/
 }
 
 
 .modules-center {
-    /*background: @base90;*/
     background: @base;
     padding:    0px 10px 0px 10px;
 }
 .empty .modules-center { background: transparent; }
 
 #workspaces {
-    /*background: @base90;*/
     background: @base;
 }
 
 #workspaces button {
     padding: 0 5px 0 6px;
     color:      @white40;
-
-
     border-top: 3px solid transparent;
     padding-bottom: 1px;
 }
@@ -56,33 +50,26 @@ window#waybar {
     background-color: @base;
     background-size: contain;
     background-position: center;
+    padding:    0px 7px 0px 10px;
 }
 #custom-wofi:hover, #custom-obsidian:hover { 
     background-color: @white40;
 }
-#custom-wofi {
-    padding:    0px 7px 0px 10px;
-}
-#custom-obsidian { 
-    background-image: url('/home/charps/.config/waybar/icons/obsidian.svg');
-    padding:    0px 12px 0px 12px;
-    margin:     0px 10px 0px 0px;
-}
 
-#tray, #custom-spotify, #scratchpad, #pulseaudio, #idle_inhibitor, #clock {
+#tray,
+#custom-spotify, 
+#scratchpad, 
+#backlight,
+#pulseaudio,
+#idle_inhibitor,
+#battery,
+#clock {
     margin:     0px 5px 0px 5px;
-    /*background: @base90;*/
     background: @base;
-}
-#tray { padding:    0px 9px 0px 8px; }
-#custom-spotify { padding:    0px 7px 0px 10px; }
-#scratchpad { padding:    0px 9px 0px 8px; }
-#pulseaudio { padding: 0 6px 0 10px; }
-#idle_inhibitor { 
-    min-width:  20px;
-    padding:    0px 8px 0px 5px;
+    padding:    0px 4px 0px 7px;
 }
 #clock { 
     margin-right: 0px;
     padding: 0 10px 0 10px;
 }
+window#waybar { background: @base; }

@@ -13,6 +13,7 @@
       "custom/mail",
       "backlight",
       "pulseaudio",
+      "battery",
       "idle_inhibitor",
       "clock"
     ],
@@ -25,7 +26,7 @@
         "on-click": "wofi",
     },
     "custom/obsidian": {
-        "format": " ",
+        "format": "󰏪 ",
         "tooltip": false,
         "on-click": "obsidian",
         "on-click-right": "firefox https://www.vlt.char.ps/Home"
@@ -52,10 +53,10 @@
         "format": "{volume} {icon} ",
         "format-alt": "{icon} ",
         "format-alt-click": "click-right",
-        "format-muted": "",
+        "format-muted": " ",
         "format-icons": {
-            "phone": [" ", " ", " ", " "],
-            "default": ["", "", "", ""]
+            "phone": ["  ", "  ", "  ", "  "],
+            "default": [" ", " ", " ", " "]
         },
         "scroll-step": 10,
         "on-click": "pavucontrol",
@@ -71,39 +72,36 @@
     "backlight": {
         "format": "{icon}",
         "format-alt": "{percent}% {icon}",
-        "format-alt-click": "click-right",
-        "format-icons": ["", ""],
-        "on-scroll-down": "light -A 1",
-        "on-scroll-up": "light -U 1"
+        "format-alt-click": "click-left",
+        "format-icons": [" ", " "],
+        "on-scroll-down": "brightnessctl set 1%-",
+        "on-scroll-up": "brightnessctl set +1%",
+        "tooltip": true,
+        "tooltip-format": "{percent}%"
     },
-    // "custom/weather": {
-    //     "format": "{}",
-    //     "tooltip": true,
-    //     "interval": 1800,
-    //     "exec": "$HOME/.config/waybar/modules/wttr.py",
-    //     "return-type": "json"
-    // },
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": " ",
+            "deactivated": " "
         },
         "tooltip": false
     },
-    "custom/mail": {
-        "format": "",
-        "format-alt": "{alt} ",
-        "format-alt-click": "click-right",
+    "battery": {
+        "bat": "BAT1",
         "interval": 60,
-        "return-type": "json",
-        "exec": "~/.config/waybar/modules/mail.py",
-        "tooltip": false
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-icons": [" ", " ", " ", " ", " "],
+        "max-length": 25
     },
     "sway/scratchpad": {
-        "format": "{icon} {count}",
+        "format": "{count} {icon}",
         "show-empty": true,
-        "format-icons": ["", ""],
+        "format-icons": [" ", " "],
         "tooltip": true,
         "tooltip-format": "{app}: {title}",
         "on-click": "swaymsg scratchpad show",
@@ -111,4 +109,5 @@
     "tray": { /* wifi and bluetooth  and stuff */
         "icon-size": 18
     },
+  "position": "bottom",
 }
