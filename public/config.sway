@@ -42,6 +42,7 @@ exec swayidle -w \
 exec /usr/lib/geoclue-2.0/demos/agent
 exec gammastep -m wayland
 exec blueman-applet
+exec mako
 exec nm-applet --indicator
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec autotiling
@@ -70,7 +71,7 @@ bindsym $mod+q kill
 bindsym $mod+d exec wofi --show=drun
 
 # Start your browser
-bindsym $mod+w exec firefox
+bindsym $mod+w exec vivaldi
 
 # Start your file manager
 bindsym $mod+e exec GTK_THEME=Adwaita:dark nemo
@@ -223,15 +224,23 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 mode "resize" {
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+    bindsym $left resize grow left 10px
+    bindsym $up resize grow up 10px
+    bindsym $down resize grow down 10px
+    bindsym $right resize grow right 10px
+    bindsym Shift+$left resize shrink right 10px
+    bindsym Shift+$up resize shrink down 10px
+    bindsym Shift+$down resize shrink up 10px
+    bindsym Shift+$right resize shrink left 10px
 
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+    bindsym Left resize grow left 10px
+    bindsym Up resize grow up 10px
+    bindsym Down resize grow down 10px
+    bindsym Right resize grow right 10px
+    bindsym Shift+Left resize shrink right 10px
+    bindsym Shift+Up resize shrink down 10px
+    bindsym Shift+Down resize shrink up 10px
+    bindsym Shift+Right resize shrink left 10px
 # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -255,6 +264,18 @@ mode "$screenshot" {
 }
 bindsym $mod+Shift+p mode "$screenshot"
 
+set $rotate h right, j normal, k flipped, l right
+mode "$rotate" {
+    bindsym h output * transform 90, mode "default"
+    bindsym j output * transform 0, mode "default"
+    bindsym k output * transform 180, mode "default"
+    bindsym l output * transform 270, mode "default"
+# back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym Mod1+r mode "default"
+}
+bindsym Mod1+r mode "$rotate"
 
 for_window {
     [app_id="foot_float"] floating enable
